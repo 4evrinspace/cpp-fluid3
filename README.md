@@ -20,8 +20,7 @@
  |Хз что это |    std::__invoke_result<std::identity&, std::pair<int, int> const&>::type std::__invoke<std::identity&, std::pair<int, int> const&>(std::identity&, std::pair<int, int> const&)  | 3.81 |
  |Тут тоже постараемся ускорить)   |    std::pair<int, int> const* std::ranges::__find_fn::operator()<std::pair<int, int> const*, std::pair<int, int> const*, std::pair<int, int>, std::identity>(std::pair<int, int> const*, std::pair<int, int> const*, std::pair<int, int> const&, std::identity) const  |  5.52 |
  |Тут тоже хз че это)    |   std::pair<int, int> const& std::forward<std::pair<int, int> const&>(std::remove_reference<std::pair<int, int> const&>::type&) |  7.75 |
- 
-|Ускорим вывод)   | write | 11.04 |
+ |Ускорим вывод)   | write | 11.04 |
  |Тут надо многопоточить)    |     propagate_flow(int, int, Fixed) | 11.70 |
  |Тут нельзя ускорить, оно и так быстрое)    |  bool std::operator==<int, int>(std::pair<int, int> const&, std::pair<int, int> const&) | 12.22 | 
 
