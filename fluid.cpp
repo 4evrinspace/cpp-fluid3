@@ -1,11 +1,16 @@
 #include <bits/stdc++.h>
-#pragma GCC optimize("Ofast")
-#pragma GCC target("avx2")
+#pragma optimize("O3")
+#pragma optimize("unroll-loops")
+#pragma optimize("omit-frame-pointer")
+#pragma optimize("inline")
+#pragma optimize("no-stack-protector")
+#pragma optimize("fast-math")
+
 using namespace std;
 
 constexpr size_t N = 36, M = 84;
 // constexpr size_t N = 14, M = 5;
-constexpr size_t T = 1'000'000;
+constexpr size_t T = 400;
 constexpr std::array<pair<int, int>, 4> deltas{{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}};
 
 // char field[N][M + 1] = {
@@ -70,7 +75,7 @@ struct Fixed {
     constexpr Fixed(double f): v(f * (1 << 16)) {}
     constexpr Fixed(): v(0) {}
 
-    inline static constexpr Fixed from_raw(int32_t x) {
+    static constexpr Fixed from_raw(int32_t x) {
         Fixed ret;
         ret.v = x;
         return ret;
@@ -143,18 +148,16 @@ struct VectorField {
     }
 
     Fixed &get(int x, int y, int dx, int dy) {
-        size_t i = 0;
-        pair<int, int> d{dx, dy};
-        if (d == deltas[0]) {
-            i = 0;
-        } else if (d == deltas[1]) {
-            i = 1;
-        } else if (d == deltas[2]) {
-            i = 2;
-        } else if (d == deltas[3]) {
-            i = 3;
-        }
-        throw std::runtime_error("Invalid delta");
+        pair<int ,int> to_find = pair(dx, dy);
+        if (to_find == deltas[0])
+            return v[x][y][0];
+        if (to_find == deltas[1])
+            return v[x][y][1];
+        if (to_find == deltas[2])
+            return v[x][y][2];
+        if (to_find == deltas[3])
+            return v[x][y][3];
+        
     }
 };
 
@@ -165,7 +168,7 @@ int UT = 0;
 
 mt19937 rnd(1337);
 
-inline tuple<Fixed, bool, pair<int, int>> propagate_flow(int x, int y, Fixed lim) {
+tuple<Fixed, bool, pair<int, int>> propagate_flow(int x, int y, Fixed lim) {
     last_use[x][y] = UT - 1;
     Fixed ret = 0;
     for (auto [dx, dy] : deltas) {
@@ -198,11 +201,11 @@ inline tuple<Fixed, bool, pair<int, int>> propagate_flow(int x, int y, Fixed lim
     return {ret, 0, {0, 0}};
 }
 
-inline Fixed random01() {
+Fixed random01() {
     return Fixed::from_raw((rnd() & ((1 << 16) - 1)));
 }
 
-inline void propagate_stop(int x, int y, bool force = false) {
+void propagate_stop(int x, int y, bool force = false) {
     if (!force) {
         bool stop = true;
         for (auto [dx, dy] : deltas) {
@@ -255,7 +258,7 @@ struct ParticleParams {
     }
 };
 
-inline bool propagate_move(int x, int y, bool is_first) {
+bool propagate_move(int x, int y, bool is_first) {
     last_use[x][y] = UT - is_first;
     bool ret = false;
     int nx = -1, ny = -1;
@@ -283,8 +286,21 @@ inline bool propagate_move(int x, int y, bool is_first) {
         }
 
         Fixed p = random01() * sum;
-        size_t d = std::ranges::upper_bound(tres, p) - tres.begin();
-
+        size_t d;
+        if ((tres[1] <=> p) > 0)
+        {
+            if ((tres[0] <=> p) > 0)
+                d = 0;
+            else
+                d = 1;
+        }
+        else 
+        {
+            if ((tres[2] <=> p) > 0)
+                d = 2;
+            else
+                d = 3;
+        }
         auto [dx, dy] = deltas[d];
         nx = x + dx;
         ny = y + dy;
@@ -314,6 +330,9 @@ inline bool propagate_move(int x, int y, bool is_first) {
 int dirs[N][M]{};
 
 int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    cout.tie(0);
     rho[' '] = 0.01;
     rho['.'] = 1000;
     Fixed g = 0.1;
@@ -427,9 +446,9 @@ int main() {
         }
 
         if (prop) {
-            cout << "Tick " << i << ":\n";
+            printf("Tick %zu\n", i);
             for (size_t x = 0; x < N; ++x) {
-                cout << field[x] << "\n";
+                printf("%s\n", field[x]);
             }
         }
     }
