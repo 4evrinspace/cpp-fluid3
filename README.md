@@ -4,7 +4,7 @@
 Пока соберем инфу, с помощью gpofng 
 (Я хз как в md делать таблички, поэтому вот так)
 | | |
- | -------------:|------------------:|
+ | -------------|------------------|
 |Experiment      |test.1.er                                   |
 |  Target        | './a.out'                                  |
 |  Host          | HomeWork (x86_64, Linux 6.5.0-44-generic)  |
@@ -24,7 +24,8 @@
  (тут нельзя ускорить, оно и так быстрое)      bool std::operator==<int, int>(std::pair<int, int> const&, std::pair<int, int> const&) - 12.22
 
 Ради фана еще включим O3 и пару оптимизаций (заменим на printf, и прагмы)
-
+| | |
+|-|-|
 |Experiment      |test.11.er                                  |
 | Target        | './a.out'                                   |
 | Host          | HomeWork (x86_64, Linux 6.5.0-44-generic)   |
