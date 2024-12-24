@@ -12,16 +12,18 @@
 |  Duration      | 263.552 Seconds                            |
 
 
-Теперь посмотрим, чего больше всего потребляло   (справа - CPU %)
-| Коментарий
-(досутп к этому , вроде никак не улучшить) std::array<std::pair<int, int>, 4ul>::data() const   : 3.55
- (вот тута можно ускорить как будто )      VectorField::get(int, int, int, int) - 3.68 
- (хз что это)    std::__invoke_result<std::identity&, std::pair<int, int> const&>::type std::__invoke<std::identity&, std::pair<int, int> const&>(std::identity&, std::pair<int, int> const&)  - 3.81
- (тут тоже постараемся ускорить)       std::pair<int, int> const* std::ranges::__find_fn::operator()<std::pair<int, int> const*, std::pair<int, int> const*, std::pair<int, int>, std::identity>(std::pair<int, int> const*, std::pair<int, int> const*, std::pair<int, int> const&, std::identity) const  -  5.52
- (тут тоже хз че это)       std::pair<int, int> const& std::forward<std::pair<int, int> const&>(std::remove_reference<std::pair<int, int> const&>::type&) -  7.75
- (ускорим вывод)    write - 11.04
- (тут надо многопоточить)         propagate_flow(int, int, Fixed) - 11.70
- (тут нельзя ускорить, оно и так быстрое)      bool std::operator==<int, int>(std::pair<int, int> const&, std::pair<int, int> const&) - 12.22
+Теперь посмотрим, чего больше всего потребляло   
+| Коментарий | Данные | CPU % |
+|-|-|
+| Досутп к этому , вроде никак не улучшить |  std::array<std::pair<int, int>, 4ul>::data() const |    3.55 |
+| Вот тута можно ускорить как будто )     | VectorField::get(int, int, int, int) | 3.68 |
+ |Хз что это)    std::__invoke_result<std::identity&, std::pair<int, int> const&>::type std::__invoke<std::identity&, std::pair<int, int> const&>(std::identity&, std::pair<int, int> const&)  | 3.81 |
+ |Тут тоже постараемся ускорить)   |    std::pair<int, int> const* std::ranges::__find_fn::operator()<std::pair<int, int> const*, std::pair<int, int> const*, std::pair<int, int>, std::identity>(std::pair<int, int> const*, std::pair<int, int> const*, std::pair<int, int> const&, std::identity) const  |  5.52 |
+ |Тут тоже хз че это)    |   std::pair<int, int> const& std::forward<std::pair<int, int> const&>(std::remove_reference<std::pair<int, int> const&>::type&) |  7.75 |
+ 
+|Ускорим вывод)   | write | 11.04 |
+ |Тут надо многопоточить)    |     propagate_flow(int, int, Fixed) | 11.70 |
+ |Тут нельзя ускорить, оно и так быстрое)    |  bool std::operator==<int, int>(std::pair<int, int> const&, std::pair<int, int> const&) | 12.22 | 
 
 Ради фана еще включим O3 и пару оптимизаций (заменим на printf, и прагмы)
 | | |
